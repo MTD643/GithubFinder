@@ -10,14 +10,22 @@ export class Search extends Component {
         searchUsers: PropTypes.func.isRequired,
         clear: PropTypes.func.isRequired,
         hasData: PropTypes.bool.isRequired,
+        setAlert: PropTypes.func.isRequired
     };
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.searchUsers(this.state.text);
-        this.setState({
-            text: ''
-        })
+        const { text } = this.state;
+
+        if (text === '') {
+            this.props.setAlert('Please search something', 'light');
+        }
+        else {
+            this.props.searchUsers(text);
+            this.setState({
+                text: ''
+            })
+        }
     }
     onChange = (e) => {
         this.setState({
@@ -27,11 +35,12 @@ export class Search extends Component {
 
     render() {
         let clearButton = null;
-        if (this.props.hasData) {
+        const { hasData, clear } = this.props;
+        if (hasData) {
             clearButton =
                 <button
                     className="btn btn-light btn-block"
-                    onClick={this.props.clear}
+                    onClick={clear}
                 >
                     Clear
                 </button>
